@@ -20,10 +20,7 @@ function pad(num){
 }
 
 function delayableChargingTime(){
-    const result = currentBattery < minimumCharge ? 80: 100-currentBattery;
-    console.log(result);
-    console.log(chargingRatePerMinute);
-    console.log(result*chargingRatePerMinute);
+    const result = currentBattery < minimumCharge ? 100-miminumCharge: 100-currentBattery;
     return Math.round(result*chargingRatePerMinute);
 }
 
@@ -32,6 +29,16 @@ function updateDisplay(){
     let hours = pad(minToHrs(expectedChargeAt));
     let minutes = pad(onlyMinutes(expectedChargeAt));
     display.setValue(hours + ':' + minutes);
+}
+
+function updateBattery(){
+    currentBattery = document.getElementById('battery_level').value;
+    updateDisplay();
+}
+
+function updateMinCharge(){
+    minimumCharge = document.getElementById('min_charge').value;
+    updateDisplay();
 }
 
 function makeKnob(){
@@ -144,6 +151,8 @@ function ready() {
     makeDisplay();
     makeKnob();
     makeCircle();
+    updateBattery();
+    updateMinCharge();
 }
 
 document.addEventListener('DOMContentLoaded', ready, false);

@@ -1,6 +1,18 @@
 var display;
 var knob;
 
+function minToHrs(min){
+    return Math.floor(min / 60);
+}
+
+function onlyMinutes(min){
+    return min % 60;
+}
+
+function pad(num){
+    return num.toString().padStart(2, 0);
+}
+
 function makeKnob(){
     // Create knob element, 300 x 300 px in size.
     knob = pureknob.createKnob(300, 300);
@@ -18,7 +30,7 @@ function makeKnob(){
     const listener = function (knob, value) {
         console.log(value);
         //assuming a charge will take 8 hours
-        display.setValue((8 + Math.floor(value / 60)).toString().padStart(2, 0) + ':' + (value % 60).toString().padStart(2, 0));
+        display.setValue((pad(8+minToHrs(value))) + ':' + pad(onlyMinutes(value)));
     };
     knob.addListener(listener);
     // Set initial value.
@@ -26,7 +38,7 @@ function makeKnob(){
     knob.setProperty('fnValueToString', function (value) {
         let hours = Math.floor(value / 60).toString();
         let minutes = (value % 60).toString();
-        return hours.padStart(1, 0) + ':' + minutes.padStart(2, 0);
+        return hours + ':' + pad(minutes);
     });
 
 
@@ -61,7 +73,7 @@ function makeDisplay(){
     display.draw();
     //Update even before mouse button is released
     setInterval(() => {
-        display.setValue((8 + Math.floor(knob.getValue() / 60)).toString().padStart(2, 0) + ':' + (knob.getValue() % 60).toString().padStart(2, 0));
+        display.setValue((pad(8 + minToHrs(knob.getValue()))) + ':' + pad(onlyMinutes(knob.getValue())));
     }, 1000);
 }
 

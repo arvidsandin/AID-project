@@ -28,7 +28,6 @@ function makeKnob(){
     knob.setProperty('textScale', 0.75);
 
     const listener = function (knob, value) {
-        console.log(value);
         //assuming a charge will take 8 hours
         display.setValue((pad(8+minToHrs(value))) + ':' + pad(onlyMinutes(value)));
     };
@@ -78,7 +77,8 @@ function makeDisplay(){
 }
 
 function getColor(hourOfDay, minuteOfDay){
-    //price of electricity hour by hour in Sweden at 2022-03-07
+    // Price of electricity hour by hour in Sweden at 2022-03-07
+    // Source: https://www.vattenfall.se/elavtal/elpriser/timpris-pa-elborsen/
     let gridUsage = [59.31, 58.27, 53.97, 73.04, 118.54, 154.32, 242.66, 539.08, 541.87, 504.55, 365.23, 223.44, 215.50, 212.00, 205.98, 206.79, 208.13, 216.63, 218.54, 231.47, 215.68, 202.84, 157.24, 122.00]
     if(minuteOfDay < 30 && hourOfDay < 23){
         hourOfDay += 1;
@@ -86,6 +86,7 @@ function getColor(hourOfDay, minuteOfDay){
     return gridUsage[hourOfDay]/Math.max.apply(Math, gridUsage);
 }
 
+// From https://codepen.io/panicbear/pen/OJVgpdx
 function makeCircle(){
     var canvas = document.getElementById("circle");
     var context = canvas.getContext("2d");
@@ -102,13 +103,12 @@ function makeCircle(){
 
         let desiredRadianAngleOnCircle = interval * i;
 
-        var x = centerX - radius * Math.cos(desiredRadianAngleOnCircle);
-        var y = centerY - radius * Math.sin(desiredRadianAngleOnCircle);
-
+        var x = centerX + radius * Math.sin(desiredRadianAngleOnCircle);
+        var y = centerY - radius * Math.cos(desiredRadianAngleOnCircle);
         context.beginPath();
         context.arc(x, y, 15, 0, Math.PI * 2);
         context.closePath();
-
+        
         let colorIntensity = getColor(i, 0)*255;
         let r = Math.floor(255 - colorIntensity);
         let g = Math.floor(colorIntensity);

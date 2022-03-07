@@ -1,5 +1,8 @@
 var display;
 var knob;
+const d = new Date();
+let currentHour = d.getHours();
+let currentMinutes = d.getMinutes();
 
 function minToHrs(min){
     return Math.floor(min / 60);
@@ -11,6 +14,11 @@ function onlyMinutes(min){
 
 function pad(num){
     return num.toString().padStart(2, 0);
+}
+
+function updateDisplay(){
+    //assuming a charge will take 8 hours
+    display.setValue((pad((currentHour + 8 + minToHrs(knob.getValue()+currentMinutes)) % 24)) + ':' + pad(onlyMinutes(knob.getValue()+currentMinutes)));
 }
 
 function makeKnob(){
@@ -28,8 +36,7 @@ function makeKnob(){
     knob.setProperty('textScale', 0.75);
 
     const listener = function (knob, value) {
-        //assuming a charge will take 8 hours
-        display.setValue((pad(8+minToHrs(value))) + ':' + pad(onlyMinutes(value)));
+        updateDisplay();
     };
     knob.addListener(listener);
     // Set initial value.
@@ -47,14 +54,16 @@ function makeKnob(){
     const elem = document.getElementById('the_knob');
     elem.appendChild(node);
 
-    // Lower by one each minute
-    setInterval(() => {
-        if (knob.getValue() > 0) {
-            knob.setValue(knob.getValue() - 1);
-        }
-    }, 1000 * 60);
-
+    
 }
+setInterval(() => {
+    currentHour = d.getHours();
+    currentMinutes = d.getMinutes();
+    // Lower by one each minute
+    if (knob.getValue() > 0) {
+        knob.setValue(knob.getValue() - 1);
+    }
+}, 1000 * 60);
 
 function makeDisplay(){
     display = new SegmentDisplay("display");
@@ -71,9 +80,7 @@ function makeDisplay(){
     display.colorOff = "#331403";
     display.draw();
     //Update even before mouse button is released
-    setInterval(() => {
-        display.setValue((pad(8 + minToHrs(knob.getValue()))) + ':' + pad(onlyMinutes(knob.getValue())));
-    }, 1000);
+    setInterval(updateDisplay, 1000);
 }
 
 function getColor(hourOfDay, minuteOfDay){

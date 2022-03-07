@@ -6,12 +6,15 @@ body{
 }
 .content{
     min-height: 600px;
+    min-width: 400px;
     margin: 0 25%;
+    padding: 5pt;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     background-color: #222;
+    color: white;
 }
 #the_knob {
     padding: 3pt;
@@ -26,7 +29,6 @@ body{
 }
 
 .text{
-    color: white;
     margin-left: 10%;
     align-self: flex-start;
 }

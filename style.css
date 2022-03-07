@@ -1,0 +1,30 @@
+* { 
+	box-sizing: border-box;
+}
+.content{
+    min-height: 600px;
+    margin: 0 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+}
+#the_knob {
+    padding: 3pt;
+    margin: 2pt;
+    position: relative;
+    top: -360px;
+}
+
+.dot{
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background-color: #91e600;
+	border-radius: 50%;
+}
+.circle {
+    width: 400px;
+    height: 400px;
+}

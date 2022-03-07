@@ -1,6 +1,6 @@
 var display;
 var knob;
-const d = new Date();
+let d = new Date();
 let currentHour = d.getHours();
 let currentMinutes = d.getMinutes();
 
@@ -57,6 +57,7 @@ function makeKnob(){
     
 }
 setInterval(() => {
+    d = new Date();
     currentHour = d.getHours();
     currentMinutes = d.getMinutes();
     // Lower by one each minute

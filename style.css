@@ -8,7 +8,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: white;
+    background-color: #222;
 }
 #the_knob {
     padding: 3pt;
@@ -17,13 +17,6 @@
     top: -360px;
 }
 
-.dot{
-	position: absolute;
-	width: 10px;
-	height: 10px;
-	background-color: #91e600;
-	border-radius: 50%;
-}
 .circle {
     width: 400px;
     height: 400px;

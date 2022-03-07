@@ -14,6 +14,13 @@ function makeKnob(){
     knob.setProperty('valMax', 16*60);
     knob.setProperty('needle', true);
     knob.setProperty('textScale', 0.75);
+
+    const listener = function (knob, value) {
+        console.log(value);
+        //assuming a charge will take 8 hours
+        display.setValue((8 + Math.floor(value / 60)).toString().padStart(2, 0) + ':' + (value % 60).toString().padStart(2, 0));
+    };
+    knob.addListener(listener);
     // Set initial value.
     knob.setValue(0);
     knob.setProperty('fnValueToString', function (value) {
@@ -22,12 +29,6 @@ function makeKnob(){
         return hours.padStart(1, 0) + ':' + minutes.padStart(2, 0);
     });
 
-    const listener = function (knob, value) {
-        console.log(value);
-        //assuming a charge will take 8 hours
-        display.setValue((8 + Math.floor(value / 60)).toString().padStart(2, 0) + ':' + (value % 60).toString().padStart(2, 0));
-    };
-    knob.addListener(listener);
 
     // Create element node.
     const node = knob.node();
@@ -37,10 +38,11 @@ function makeKnob(){
 
     // Lower by one each minute
     setInterval(() => {
-        if (knob.val > 0){
-            knob.setValue(knob.val-1);
+        if (knob.getValue() > 0) {
+            knob.setValue(knob.getValue() - 1);
         }
     }, 1000 * 60);
+
 }
 
 function makeDisplay(){
@@ -57,6 +59,10 @@ function makeDisplay(){
     display.colorOn = "#e95d0f";
     display.colorOff = "#331403";
     display.draw();
+    //Update even before mouse button is released
+    setInterval(() => {
+        display.setValue((8 + Math.floor(knob.getValue() / 60)).toString().padStart(2, 0) + ':' + (knob.getValue() % 60).toString().padStart(2, 0));
+    }, 1000);
 }
 
 function getColor(hourOfDay, minuteOfDay){
@@ -102,9 +108,9 @@ function makeCircle(){
 }
 
 function ready() {
+    makeDisplay();
     makeKnob();
     makeCircle();
-    makeDisplay();
 }
 
 document.addEventListener('DOMContentLoaded', ready, false);

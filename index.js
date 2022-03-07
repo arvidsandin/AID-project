@@ -3,9 +3,12 @@ var knob;
 let d = new Date();
 let currentHour = d.getHours();
 let currentMinutes = d.getMinutes();
+let currentBattery = 50;
+let minimumCharge = 20;
+const chargingRatePerMinute = (7*60)/100;// Assuming it takes 7 hours to charge a full charge and that the charging speed is uniform
 
 function minToHrs(min){
-    return Math.floor(min / 60);
+    return Math.floor(min / 60) % 24;
 }
 
 function onlyMinutes(min){
@@ -16,9 +19,19 @@ function pad(num){
     return num.toString().padStart(2, 0);
 }
 
+function delayableChargingTime(){
+    const result = currentBattery < minimumCharge ? 80: 100-currentBattery;
+    console.log(result);
+    console.log(chargingRatePerMinute);
+    console.log(result*chargingRatePerMinute);
+    return Math.round(result*chargingRatePerMinute);
+}
+
 function updateDisplay(){
-    //assuming a charge will take 8 hours
-    display.setValue((pad((currentHour + 8 + minToHrs(knob.getValue()+currentMinutes)) % 24)) + ':' + pad(onlyMinutes(knob.getValue()+currentMinutes)));
+    let expectedChargeAt = currentHour * 60 + currentMinutes + delayableChargingTime() + knob.getValue();//minutes from 00:00
+    let hours = pad(minToHrs(expectedChargeAt));
+    let minutes = pad(onlyMinutes(expectedChargeAt));
+    display.setValue(hours + ':' + minutes);
 }
 
 function makeKnob(){

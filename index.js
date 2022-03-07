@@ -20,7 +20,7 @@ function pad(num){
 }
 
 function delayableChargingTime(){
-    const result = currentBattery < minimumCharge ? 100-miminumCharge: 100-currentBattery;
+    const result = currentBattery < minimumCharge ? 100-minimumCharge: 100-currentBattery;
     return Math.round(result*chargingRatePerMinute);
 }
 

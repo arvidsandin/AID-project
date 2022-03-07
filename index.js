@@ -6,7 +6,7 @@ function makeKnob(){
     knob.setProperty('angleEnd', 2 * Math.PI);
     knob.setProperty('colorFG', '#fff');
     knob.setProperty('colorBG', '#000');
-    knob.setProperty('trackWidth', 0.2);
+    knob.setProperty('trackWidth', 0.4);
     knob.setProperty('valMin', 0);
     knob.setProperty('valMax', 16*60);
     knob.setProperty('needle', true);
@@ -56,19 +56,17 @@ function makeCircle(){
 
         let desiredRadianAngleOnCircle = interval * i;
 
-        var x = centerX + radius * Math.cos(desiredRadianAngleOnCircle);
-        var y = centerY + radius * Math.sin(desiredRadianAngleOnCircle);
+        var x = centerX - radius * Math.cos(desiredRadianAngleOnCircle);
+        var y = centerY - radius * Math.sin(desiredRadianAngleOnCircle);
 
         context.beginPath();
         context.arc(x, y, 15, 0, Math.PI * 2);
         context.closePath();
 
         let colorIntensity = getColor(i, 0)*255;
-        console.log(colorIntensity);
         let r = Math.floor(255 - colorIntensity);
         let g = Math.floor(colorIntensity);
         let b = 0;
-        console.log(r, g, b);
         context.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
         context.fill();
 

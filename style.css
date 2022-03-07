@@ -1,6 +1,9 @@
 * { 
 	box-sizing: border-box;
 }
+body{
+    margin: 0;
+}
 .content{
     min-height: 600px;
     margin: 0 25%;
@@ -20,4 +23,14 @@
 .circle {
     width: 400px;
     height: 400px;
+}
+
+.text{
+    color: white;
+    margin-left: 10%;
+    align-self: flex-start;
+}
+#display{
+    margin-left: 10%;
+    align-self: flex-start;
 }

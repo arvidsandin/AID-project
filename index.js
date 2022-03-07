@@ -1,6 +1,9 @@
+var display;
+var knob;
+
 function makeKnob(){
     // Create knob element, 300 x 300 px in size.
-    const knob = pureknob.createKnob(300, 300);
+    knob = pureknob.createKnob(300, 300);
     // Set properties.
     knob.setProperty('angleStart', 0 * Math.PI);
     knob.setProperty('angleEnd', 2 * Math.PI);
@@ -21,6 +24,8 @@ function makeKnob(){
 
     const listener = function (knob, value) {
         console.log(value);
+        //assuming a charge will take 8 hours
+        display.setValue((8 + Math.floor(value / 60)).toString().padStart(2, 0) + ':' + (value % 60).toString().padStart(2, 0));
     };
     knob.addListener(listener);
 
@@ -29,6 +34,29 @@ function makeKnob(){
     // Add it to the DOM.
     const elem = document.getElementById('the_knob');
     elem.appendChild(node);
+
+    // Lower by one each minute
+    setInterval(() => {
+        if (knob.val > 0){
+            knob.setValue(knob.val-1);
+        }
+    }, 1000 * 60);
+}
+
+function makeDisplay(){
+    display = new SegmentDisplay("display");
+    display.pattern = "##:##";
+    display.displayAngle = 6;
+    display.digitHeight = 20;
+    display.digitWidth = 14;
+    display.digitDistance = 2.5;
+    display.segmentWidth = 2;
+    display.segmentDistance = 0.3;
+    display.segmentCount = 7;
+    display.cornerType = 3;
+    display.colorOn = "#e95d0f";
+    display.colorOff = "#331403";
+    display.draw();
 }
 
 function getColor(hourOfDay, minuteOfDay){
@@ -76,6 +104,7 @@ function makeCircle(){
 function ready() {
     makeKnob();
     makeCircle();
+    makeDisplay();
 }
 
 document.addEventListener('DOMContentLoaded', ready, false);

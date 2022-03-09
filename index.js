@@ -104,12 +104,18 @@ function makeDisplay(){
     setInterval(updateDisplay, 1000);
 }
 
-function getColor(hourOfDay, minuteOfDay){
+// Returns how much the electricity costs at a certatin time of day on a scale from 0.00 (free) to 1.00 (the highest price during that day)
+function getGridUsage(hourOfDay, minuteOfDay){
     // Price of electricity hour by hour in Sweden at 2022-03-07
     // Source: https://www.vattenfall.se/elavtal/elpriser/timpris-pa-elborsen/
     let gridUsage = [59.31, 58.27, 53.97, 73.04, 118.54, 154.32, 242.66, 539.08, 541.87, 504.55, 365.23, 223.44, 215.50, 212.00, 205.98, 206.79, 208.13, 216.63, 218.54, 231.47, 215.68, 202.84, 157.24, 122.00]
-    if(minuteOfDay < 30 && hourOfDay < 23){
+    // Using 2022-02-17 instead since it shows a peak both in the morning and late afternoon
+    gridUsage = [18.48, 15.89, 15.87, 14.76, 15.89, 34.89, 95.15, 116.01, 113.31, 108.37, 100.45, 81.86, 68.75, 38.02, 45.10, 69.42, 90.96, 112.24, 113.96, 104.73, 63.34, 42.33, 37.07, 16.91]
+    if(minuteOfDay < 30){
         hourOfDay += 1;
+    }
+    if(hourOfDay >= 24){
+        hourOfDay = hourOfDay % 24
     }
     return gridUsage[hourOfDay]/Math.max.apply(Math, gridUsage);
 }
@@ -137,9 +143,9 @@ function makeCircle(){
         context.arc(x, y, 15, 0, Math.PI * 2);
         context.closePath();
         
-        let colorIntensity = getColor(i, 0)*255;
-        let r = Math.floor(255 - colorIntensity);
-        let g = Math.floor(colorIntensity);
+        let colorIntensity = getGridUsage(i+currentHour, currentMinutes)*255;
+        let r = Math.floor(colorIntensity);
+        let g = Math.floor(255 - colorIntensity);
         let b = 0;
         context.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
         context.fill();
